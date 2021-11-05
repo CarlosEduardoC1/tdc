@@ -1,16 +1,12 @@
 import * as React from 'react';
-import { View, StyleSheet, Dimensions, Image } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import AntIcons from 'react-native-vector-icons/AntDesign';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Feather} from 'react-native-vector-icons';
 
 import MainScreen from '../../pages/Main';
 import CadProcesso from '../../pages/Processo/Cadastrar';
 import Perfil from '../../pages/Perfil';
 import ViewProcess from '../../pages/viewProcess';
-import Chat from '../../pages/chat';
 
 const initialLayout = { width: Dimensions.get('screen').width };
 
@@ -18,19 +14,16 @@ const getTabBarIcon = props => {
     const { route } = props
 
     if (route.key === 'novo') {
-        return <AntIcons name='addfile' size={20} color={'grey'} />
+        return <Feather name='file-plus' size={20} color={'#fff'} />
     }
     if (route.key === 'lista') {
-        return <MaterialIcons name='dashboard' size={20} color={'grey'} />
-    }
-    if (route.key === 'faq') {
-        return <MaterialIcons name='question-answer' size={20} color={'grey'} />
+        return <Feather name='copy' size={20} color={'#fff'} />
     }
     if (route.key === 'home') {
-        return <AntIcons name='home' size={20} color={'grey'} />
+        return <Feather name='home' size={20} color={'#fff'} />
     }
     if (route.key === 'config') {
-        return <AwesomeIcon name='gear' size={20} color={'grey'} />
+        return <Feather name='settings' size={20} color={'#fff'} />
     }
 }
 
@@ -49,9 +42,8 @@ export default function TabFooter() {
 
     const renderScene = SceneMap({
         home: () => <MainScreen foo={"dido"} />,
-        novo: () => <CadProcesso modal={open} />,
+        novo: () => <CadProcesso />,
         lista: () => <ViewProcess />,
-        // faq: () => <Chat />,
         config: () => <Perfil />,
     });
 
@@ -66,19 +58,11 @@ export default function TabFooter() {
             renderTabBar={props =>
                 <TabBar
                     {...props}
-                    style={{ backgroundColor: '#f2f2f2' }}
-                    indicatorStyle={{ backgroundColor: 'red' }}
+                    style={{ backgroundColor: "#003380" }}
+                    indicatorStyle={{ backgroundColor: '#66a3ff', height: "100%" }}
                     renderIcon={props => getTabBarIcon(props)}
-                    tabStyle={styles.bubble}
-                    labelStyle={styles.noLabel}
                     onTabPress={handleOpenModal}
                 />}
         />
     );
 }
-
-const styles = StyleSheet.create({
-    scene: {
-        flex: 1,
-    },
-});

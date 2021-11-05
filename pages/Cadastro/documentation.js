@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import global from '../../styles/global-style';
 import styles from '../../styles/cadastro-style';
+import mainStyles from '../../styles/main-styles';
 
 export default function Documentation(props) {
     // console.log(props);
@@ -69,7 +70,7 @@ export default function Documentation(props) {
                 await AsyncStorage.setItem('nascimento', props.dadosCadastro.nascimento.toString());
 
                 setLoading(false);
-                Actions.success({ buttonColor: "#fff", text: "Cadastro realizado com sucesso", buttonText: "Acessar o APP", press: () => { Actions.tabs() } });
+                Actions.success({ buttonColor: "#fff", text: "Cadastro realizado com sucesso", buttonText: "Acessar o APP", press: () => { Actions.login() } });
             })
             .catch(error => console.log(error));
     }
@@ -84,7 +85,9 @@ export default function Documentation(props) {
     return (
         <SafeAreaView style={global.container}>
             <StatusBar {...global.statusbar} />
-            <Image style={global.imageNavBar} source={require('../../assets/img/splash.png')} />
+            <View style={global.navbar}>
+                <Image style={mainStyles.image} source={require('../../assets/img/logo_branca.png')} resizeMode='contain' />
+            </View>
             <Camera
                 ref={camRef}
                 style={styles.camStyle}

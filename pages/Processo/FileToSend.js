@@ -7,17 +7,24 @@ import { html } from './index';
 import global from '../../styles/global-style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Actions } from 'react-native-router-flux';
+import { useToast } from 'native-base';
 
 
 
 export default function FileProcess(props) {
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   let files = [];
   let names = [];
   const setInFiles = (data) => {
     if (data.indexOf("name") > -1) {
-      alert(data.slice(4) + " foi adicionado com sucesso!");
+      toast.show({
+        title: "Sucesso!",
+        status: "success",
+        description: "O arquivo " + data.slice(4) + " foi adicionado com sucesso!",
+        placement: "top-right",
+      })
       names.push(data.slice(4));
     } else {
       files.push(data);
@@ -35,11 +42,16 @@ export default function FileProcess(props) {
     const response = await _sendDocs(props.values)
     if (response.status === 200) {
       setLoading(false);
-      Actions.success({ buttonColor: "#fff", text: "Processo cadastrado com sucesso", buttonText: "Ver Processos", press: () => { Actions.tabs() } });
+      Actions.success({ buttonColor: "#fff", text: "Processo cadastrado com sucesso", buttonText: "Ir para tela inicial", press: () => { Actions.tabs() } });
     }
     else {
       setLoading(false);
-      alert("Erro ao cadastrar processo. Tente novamente.");
+      toast.show({
+        title: "Ops...",
+        status: "error",
+        description: "Erro ao cadastrar. Tente novamente!",
+        placement: "top-right",
+      })
     }
   }
 

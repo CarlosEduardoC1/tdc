@@ -2,7 +2,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export const server = 'http://192.168.1.2:3000';
+// export const server = 'http://192.168.1.3:3000';
+export const server = 'https://ed3b-2804-3a8-84d-8d00-fdbc-5507-a1-8b4b.ngrok.io';
 
 export const getCEP = async (cep) => {
     return await axios.post(server + "cep", { cep: cep })
@@ -97,6 +98,67 @@ export const _saveFaq = async (json) => {
     const token = await AsyncStorage.getItem('token');
 
     const response = await axios.post(`${server}/chat/set-message`, json, {
+        headers: {
+            'Accept': 'application/json',
+            "Authorization": "Bearer " + token
+        }
+    });
+    return response;
+}
+
+export const _getFiles = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    const response = await axios.get(`${server}/files`, {
+        headers: {
+            'Accept': 'application/json',
+            "Authorization": "Bearer " + token
+        }
+    });
+    return response;
+}
+
+export const _deleteProcess = async (id_process) => {
+    const token = await AsyncStorage.getItem('token');
+    const id = await AsyncStorage.getItem('id');
+
+    const response = await axios.delete(`${server}/processos/drop-process/${id_process}/${id}`, {
+        headers: {
+            'Accept': 'application/json',
+            "Authorization": "Bearer " + token
+        }
+    });
+    return response;
+}
+
+export const _getFileName = async (user, processo) => {
+    const token = await AsyncStorage.getItem('token');
+
+    const response = await axios.get(`${server}/files/get-names/${user}/${processo}`, {
+        headers: {
+            'Accept': 'application/json',
+            "Authorization": "Bearer " + token
+        }
+    });
+    return response;
+}
+
+export const _updateProcessFile = async (json) => {
+    const token = await AsyncStorage.getItem('token');
+
+    const response = await axios.post(`${server}/processos/update-process-file`, json, {
+        headers: {
+            'Accept': 'application/json',
+            "Authorization": "Bearer " + token
+        }
+    });
+    return response;
+}
+
+export const _deleteProcessFile = async (json) => {
+    const token = await AsyncStorage.getItem('token');
+
+    const response = await axios.post(`${server}/files/delete-files`, json, {
         headers: {
             'Accept': 'application/json',
             "Authorization": "Bearer " + token

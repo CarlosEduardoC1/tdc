@@ -75,8 +75,8 @@ export default function Loading() {
             await _authentication({ email, password })
                 .then(async response => {
                     await AsyncStorage.setItem('token', response.data.token);
-                    // Actions.tabs();
-                    Actions.login();
+                    Actions.tabs();
+                    // Actions.login();
                 })
                 .catch(() => {
                     // Actions.tabs();

@@ -37,18 +37,18 @@ export default function Chat(props) {
 
     return (
         <View style={global.pagesContainer}>
-            <View style={{ width: "100%", alignItems: "center", justifyContent: "space-between", height: 80, backgroundColor: "#01A79C", flexDirection: "row", padding: 5, paddingTop: 30 }}>
+            <View style={{ width: "100%", alignItems: "center", justifyContent: "space-between", height: 80, backgroundColor: "#003380", flexDirection: "row", padding: 5, paddingTop: 30 }}>
                 <IconButton icon="arrow-left" color="white" onPress={() => Actions.pop()} />
                 <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center", color: "white" }}>{props.processo}</Text>
             </View>
-            <View style={{ height: "80%", width: "100%", padding: 15 }}>
+            <View style={{ height: "100%", width: "100%", padding: 15 }}>
                 <ScrollView ref={scrollRef}
                     onContentSizeChange={() => scrollRef.current.scrollToEnd({ animated: true })}>
                     {conversation.map(message => {
                         if (message.type === 'send') {
                             return (
                                 <View style={{ width: "100%", alignItems: "flex-end", marginRight: 15, marginTop: 5 }}>
-                                    <Text style={{ textAlign: 'right', backgroundColor: "#93EDE9", borderRadius: 10, width: '80%', height: 40, padding: 10 }}>{message.message}</Text>
+                                    <Text style={{ textAlign: 'right', backgroundColor: "#003380", borderRadius: 10, width: '80%', height: 40, padding: 10, color: "white" }}>{message.message}</Text>
                                 </View>
                             )
                         } else {
@@ -60,16 +60,16 @@ export default function Chat(props) {
                         }
                     })}
                 </ScrollView>
-            </View>
-            <View style={{ height: "15%", width: "100%", backgroundColor: "#f2f2f2", alignItems: "flex-start", justifyContent: "space-between", flexDirection: "row", padding: 10 }}>
-                <TextInput style={{ width: "90%", height: 50 }}
-                    mode="outlined"
-                    placeholder="Mensagem"
-                    onChangeText={text => setMessage(text)}
-                    disabled={loading}
-                    value={message}
-                />
-                <IconButton disabled={loading} icon="send" color="#01A79C" onPress={() => saveConversation()} />
+                <View style={{ height: "20%", width: "100%", alignItems: "flex-start", justifyContent: "space-between", flexDirection: "row", padding: 10 }}>
+                    <TextInput style={{ width: "90%", height: 50 }}
+                        mode="outlined"
+                        placeholder="Mensagem"
+                        onChangeText={text => setMessage(text)}
+                        disabled={loading}
+                        value={message}
+                    />
+                    <IconButton style={{alignItems:"center"}} disabled={loading} icon="send" color="#01A79C" onPress={() => saveConversation()} />
+                </View>
             </View>
 
         </View>

@@ -3,7 +3,7 @@ import { View, Text, TouchableHighlight, ScrollView, Modal } from 'react-native'
 import { Avatar, Button, Card, TextInput } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as DocumentPicker from 'expo-document-picker';
-import { server, _getMyProcess, _sendDocs } from '../../services';
+import { server, _deleteProcess, _getMyProcess, _sendDocs } from '../../services';
 import * as FileSystem from 'expo-file-system';
 import { WebView } from 'react-native-webview';
 import { Actions } from 'react-native-router-flux';
@@ -17,22 +17,34 @@ export default function ViewProcess(props) {
     const [data, setData] = useState([]);
     const [isVisible, setIsVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [rerender, setRerender] = useState(false);
+    const [id, setId] = useState();
 
     const getProcess = async () => {
         await _getMyProcess()
             .then(response => {
-                // console.log(response.data);
                 setData(response.data);
             });
     }
 
-    const deleteProcess = () => {
-        setIsVisible(false);
+    const deleteProcess = async () => {
+        setLoading(true);
+        await _deleteProcess(id).then(() => {
+            setLoading(false);
+            alert("Processo deletado com sucesso!");
+            setRerender(!rerender);
+            setIsVisible(false);
+        }).catch(() => {
+            setLoading(false);
+            alert("Erro ao deletar processo. Tente novamente!");
+            setRerender(!rerender);
+            setIsVisible(false);
+        })
     }
 
     useEffect(() => {
         getProcess();
-    }, []);
+    }, [rerender]);
 
 
     return (
@@ -44,27 +56,28 @@ export default function ViewProcess(props) {
                 {data.map((data, index) => {
                     return (
                         <Card key={index} style={{ borderRadius: 10, backgroundColor: "#f2f2f2", margin: 5, height: 100 }} mode="elevated">
-                            <Card.Title title={data.face_reclamacao} left={() => <Avatar.Icon icon="clipboard-list" size={30} style={{ backgroundColor: "#01A79C" }} />} />
+                            <Card.Title title={data.numProcesso ? data.numProcesso : "Processo em análise"} 
+                            left={() => <Avatar.Icon icon="clipboard-list" size={30} style={{ backgroundColor: "#003380" }} />} />
                             <Card.Content style={{ justifyContent: "space-between", flexDirection: "row", height: 20 }}>
                                 <Button icon="delete"
                                     color='red'
                                     mode="outlined"
                                     style={{ alignItems: "center", justifyContent: "center", width: "33%", borderColor: "red" }}
-                                    onPress={() => { setIsVisible(true); }}>
+                                    onPress={() => { setIsVisible(true); setId(data.id) }}>
                                     DELETAR
                                 </Button>
                                 <Button icon="file-pdf-box"
                                     mode="outlined"
                                     style={{ alignItems: "center", justifyContent: "center", width: "33%", borderColor: "purple" }}
                                     color='purple'
-                                // onPress={() => { setVisible(true); setCarData(item); setDespesas(true); setVenda(false); }}>
+                                    onPress={() => { Actions.viewFiles({ processo: data.face_reclamacao, id_user: data.PrcUsr[0].id, id_processo: data.id }) }}
                                 >ARQUIVOS
                                 </Button>
                                 <Button icon="chat"
                                     color='blue'
                                     mode="outlined"
                                     style={{ alignItems: "center", justifyContent: "center", width: "33%", borderColor: "blue" }}
-                                    onPress={() => { Actions.chat({ processo: data.face_reclamacao, id_user: data.PrcUsr[0].id, id_processo: data.id }) }}>
+                                    onPress={() => { Actions.chat({ processo: data.numProcesso ? data.numProcesso : "Processo em análise", id_user: data.PrcUsr[0].id, id_processo: data.id }) }}>
                                     CHAT
                                 </Button>
                             </Card.Content>

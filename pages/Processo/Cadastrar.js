@@ -14,8 +14,7 @@ export default function CadProcesso(props) {
 
     return (
         <View style={global.container}>
-            <ModalUpDown component={<ContentModal changeService={changeService} />} height={250} open={props.modal} close={close} />
-            {close ? <Form servico={servico} /> : null}
+            <Form servico={"Processo"} />
         </View >
     );
 }

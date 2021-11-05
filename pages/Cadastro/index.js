@@ -10,9 +10,12 @@ import * as ImagePicker from 'expo-image-picker';
 import AlertModal from '../../components/AlertModal';
 import ModalUpDown from '../../components/Modalize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useToast } from 'native-base';
+
 
 import styles from '../../styles/cadastro-style';
 import global from '../../styles/global-style';
+import mainStyles from '../../styles/main-styles';
 
 export default function Cadastro() {
     const [loading, setLoading] = useState(false);
@@ -32,6 +35,7 @@ export default function Cadastro() {
     const [image, setImage] = useState(null);
     const [imageBase64, setImageBase64] = useState(null);
     const [close, setClose] = useState(false);
+    const toast = useToast();
 
     useEffect(() => {
         (async () => {
@@ -78,7 +82,9 @@ export default function Cadastro() {
     return (
         <View style={global.container}>
             <StatusBar {...global.statusbar} />
-            <Image style={global.imageNavBar} source={require('../../assets/img/splash.png')} />
+            <View style={global.navbar}>
+                <Image style={mainStyles.image} source={require('../../assets/img/logo_branca.png')} resizeMode='contain' />
+            </View>
             <ScrollView style={{ width: "100%", height: "100%", padding: 5 }}>
                 <View style={styles.profilePic}>
                     <TouchableHighlight underlayColor="transparent" onPress={pickImage} >
@@ -200,14 +206,19 @@ export default function Cadastro() {
             <View style={styles.buttonView}>
                 <Button style={global.sendButton} {...global.sendButtonProps} onPress={async () => {
                     // if (erroMail || erroNome || erroPass || !!cpf === false || !!nascimento === false || !!fone === false || !!cep === false || !!endereco === false) {
-                    //     setModal(true); setClose(false);
+
+                    //     toast.show({
+                    //         title: "Ops...",
+                    //         status: "error",
+                    //         description: "Você precisa informar todos os dados",
+                    //         placement: "top-right",
+                    //     })
                     // } else {
-                        const json = {
-                            name: nome, email: mail, password: password, nascimento: nascimento, lo_pago: 'N', fone: fone, cpf: cpf, cep: cep
-                            , endereco: endereco, type: 'US', appID: await AsyncStorage.getItem('appId'), profile: imageBase64
-                        };
-                        Actions.sendDocs({ dadosCadastro: json })
-                        // Actions.pagamento();
+                    const json = {
+                        name: nome, email: mail, password: password, nascimento: nascimento, lo_pago: 'N', fone: fone, cpf: cpf, cep: cep
+                        , endereco: endereco, type: 'US', appID: await AsyncStorage.getItem('appId'), profile: imageBase64
+                    };
+                    Actions.sendDocs({ dadosCadastro: json })
                     // }
                 }} loading={loading} disabled={loading}>Próximo</Button>
             </View>

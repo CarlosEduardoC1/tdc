@@ -63,7 +63,7 @@ export default function Perfil() {
                             </ImageBackground>
                         </View>
                         <View style={perfilStyle.contentData}>
-                            <TouchableHighlight underlayColor="transparent" onPress={() => { setModal(true); setClose(false); }} style={{ width: "50%" }}>
+                            <TouchableHighlight underlayColor="transparent">
                                 <View style={perfilStyle.contentViewRight}>
                                     <Avatar.Icon size={50} icon='package-up' style={{ backgroundColor: '#8ED9EC' }} />
                                     <Text style={{ fontWeight: 'bold' }}>{processo.count} Processos</Text>
